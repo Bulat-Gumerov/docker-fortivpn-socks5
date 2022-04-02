@@ -7,14 +7,18 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     env:
       IMAGE_NAME: longjourney/openfortivpn-socks5
 
     steps:
-      - uses: actions/checkout@v2
-
-      - run: docker buildx --platform linux/arm64 --pull -t $IMAGE_NAME:latest .
+      - uses: actions/checkout@v2.1.0
+      - uses: uraimo/run-on-arch-action@v2
+        name: Run build
+        with:
+          arch: aarch64
+          distro: ubuntu20.04
+          run: docker build --pull -t $IMAGE_NAME:latest .
 
       - name: Push container images
         env:

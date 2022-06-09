@@ -20,16 +20,19 @@ Connect to a Fortinet SSL-VPN via http/socks5 proxy.
     $ docker container run \
         --privileged
         --rm \
+        -p 8443:8443
         -v /path/to/config:/etc/openfortivpn/config:ro \
         longjourney/openfortivpn-socks5
     ```
 
-3. Now you can use SSL-VPN via `http://<container-ip>:8443` or `socks5://<container-ip>:8443`.
+3. Now you can use SSL-VPN via `http://0.0.0.0:8443` or `socks5://0.0.0.0:8443`. You can also create an alias in your bashrc/zshrc:
 
     ```
-    $ http_proxy=http://172.17.0.2:8443 curl http://example.com
+    $ alias curlp='curl -x socks5://0.0.0.0:8443/'
+    $ curlp http://example.com
 
-    $ ssh -o ProxyCommand="nc -x 172.17.0.2:8443 %h %p" foo@example.com
+    $ alias sshp='ssh -o ProxyCommand="nc -x 0.0.0.0:8443 %h %p"'
+    $ sshp foo@example.com
     ```
 
 ## License
